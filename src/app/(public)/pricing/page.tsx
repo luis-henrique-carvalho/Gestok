@@ -17,7 +17,7 @@ export default async function Home() {
                 "100 agendamentos/mês",
                 "Métricas básicas",
                 "Suporte por email",
-                "Cadastro de pacientes"
+                "Cadastro de products"
             ],
             popular: false,
             iconName: "star"
