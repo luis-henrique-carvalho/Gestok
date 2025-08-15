@@ -19,6 +19,7 @@ const AddProductButton = () => {
         onSuccess={() => {
           setIsOpen(false);
         }}
+        isOpen={isOpen}
       />
     </Dialog>
   );

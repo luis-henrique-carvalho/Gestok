@@ -5,6 +5,7 @@ import { db } from "@/drizzle/db";
 import { productTable } from "@/drizzle/schema";
 import { like, count, desc } from "drizzle-orm";
 import { actionClient } from "@/lib/safe-action";
+import { revalidatePath } from "next/cache";
 
 const GetProductsSchema = z.object({
   searchName: z.string().optional().default(""),

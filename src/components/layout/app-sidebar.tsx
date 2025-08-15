@@ -4,6 +4,7 @@ import {
   Gem,
   LayoutDashboard,
   LogOut,
+  Package,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -35,6 +36,11 @@ const items = [
     title: "Dashboard",
     url: "/dashboard",
     icon: LayoutDashboard,
+  },
+  {
+    title: "Prodotos",
+    url: "/products",
+    icon: Package,
   },
 ];
 

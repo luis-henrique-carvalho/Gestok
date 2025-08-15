@@ -47,29 +47,46 @@ import { getCategories } from "@/app/(shared)/actions/categories/get-categories"
 interface UpsertProductFormProps {
   onSuccess?: () => void;
   product?: typeof productTable.$inferSelect;
+  isOpen: boolean;
 }
 
-const UpsertProductForm = ({ product, onSuccess }: UpsertProductFormProps) => {
+const UpsertProductForm = ({ product, onSuccess, isOpen }: UpsertProductFormProps) => {
   const { data: categories } = useQuery({
     queryKey: ["get-categories"],
-    queryFn: () => getCategories(),
+    queryFn: async () => await getCategories(),
   });
 
+  const defaultValues = {
+    id: product?.id,
+    name: product?.name || "",
+    description: product?.description || "",
+    price: product?.price ? product.price : "0",
+    sku: product?.sku || "",
+    categoryId: product?.categoryId
+      ? product.categoryId.toString()
+      : categories?.data?.[0]?.id?.toString() || undefined,
+  }
 
   const form = useForm<UpsertProductFormData>({
     shouldUnregister: true,
     resolver: zodResolver(upsertProductSchema),
-    defaultValues: {
-      id: product?.id,
-      name: product?.name || "",
-      description: product?.description || "",
-      price: product?.price ? product.price : "0",
-      sku: product?.sku || "",
-      categoryId: product?.categoryId
-        ? product.categoryId.toString()
-        : categories?.data?.[0]?.id?.toString() || undefined,
-    },
+    defaultValues: defaultValues,
   });
+
+  useEffect(() => {
+    if (isOpen) {
+      form.reset({
+        id: product?.id,
+        name: product?.name || "",
+        description: product?.description || "",
+        price: product?.price ? product.price : "0",
+        sku: product?.sku || "",
+        categoryId: product?.categoryId
+          ? product.categoryId.toString()
+          : categories?.data?.[0]?.id?.toString() || undefined,
+      });
+    }
+  }, [isOpen, form, product]);
 
   const upsertProductAction = useAction(upsertProduct, {
     onSuccess: ({ data }) => {

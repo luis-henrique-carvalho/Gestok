@@ -103,6 +103,7 @@ const TableActions = ({ product }: Props) => {
         <UpsertProductForm
           onSuccess={handleEditProductClick}
           product={product}
+          isOpen={upsertDialogIsOpen}
         />
       </DropdownMenu>
     </Dialog>

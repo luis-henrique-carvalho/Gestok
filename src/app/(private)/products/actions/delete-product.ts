@@ -36,7 +36,7 @@ export const deleteProduct = actionClient
     try {
       await db.delete(productTable).where(eq(productTable.id, parsedInput.id));
 
-      revalidatePath("/products");
+      await revalidatePath("/products");
     } catch (error) {
       throw error;
     }
