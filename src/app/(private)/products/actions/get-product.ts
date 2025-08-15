@@ -3,9 +3,9 @@
 import { z } from "zod";
 import { db } from "@/drizzle/db";
 import { productTable } from "@/drizzle/schema";
-import { like, count, desc } from "drizzle-orm";
+import { like, count, desc, and, eq } from "drizzle-orm";
 import { actionClient } from "@/lib/safe-action";
-import { revalidatePath } from "next/cache";
+import { requireActionAuth } from "@/lib/auth-utils";
 
 const GetProductsSchema = z.object({
   searchName: z.string().optional().default(""),
@@ -17,7 +17,12 @@ export const getProducts = actionClient
   .inputSchema(GetProductsSchema)
   .action(async ({ parsedInput }) => {
     const { searchName, page, limit } = parsedInput;
+
     try {
+      const session = await requireActionAuth();
+
+      const userId = session.user.id;
+
       const filterCondition = searchName
         ? like(productTable.name, `%${searchName}%`)
         : undefined;
@@ -25,7 +30,7 @@ export const getProducts = actionClient
       const offset = (page - 1) * limit;
 
       const products = await db.query.productTable.findMany({
-        where: filterCondition,
+        where: and(filterCondition, eq(productTable.userId, userId)),
         limit,
         with: {
           category: true,
@@ -40,7 +45,7 @@ export const getProducts = actionClient
       const totalCount = await db
         .select({ count: count() })
         .from(productTable)
-        .where(filterCondition);
+        .where(and(filterCondition, eq(productTable.userId, userId)));
 
       return {
         data: products,

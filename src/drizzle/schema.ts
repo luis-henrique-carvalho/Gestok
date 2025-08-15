@@ -81,9 +81,9 @@ export const productTable = pgTable(
   "products",
   {
     id: serial("id").primaryKey(),
-    name: text("name").notNull().unique(),
+    name: text("name").notNull(),
     description: text("description").notNull(),
-    sku: text("sku").notNull().unique(),
+    sku: text("sku").notNull(),
     price: numeric("price", { precision: 10, scale: 2 }).notNull(),
     userId: text("user_id")
       .notNull()
@@ -99,7 +99,8 @@ export const productTable = pgTable(
       .notNull(),
   },
   (table) => [
-    uniqueIndex("products_sku_index").on(table.sku),
+    uniqueIndex("products_sku_user_id_index").on(table.sku, table.userId),
+    uniqueIndex("products_name_user_id_index").on(table.name, table.userId),
     index("products_user_id_index").on(table.userId),
     index("products_category_id_index").on(table.categoryId),
     index("products_name_index").on(table.name),

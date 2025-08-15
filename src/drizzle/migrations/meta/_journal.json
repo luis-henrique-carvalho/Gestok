@@ -22,6 +22,20 @@
       "when": 1755216593802,
       "tag": "0002_fix_product_price",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1755289263870,
+      "tag": "0003_fix_sku_unique",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1755289360126,
+      "tag": "0004_fix_name_unique",
+      "breakpoints": true
     }
   ]
 }

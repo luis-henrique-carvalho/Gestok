@@ -33,6 +33,10 @@ export const deleteProduct = actionClient
       throw new Error("Product not found");
     }
 
+    if (product.userId !== session.user.id) {
+      throw new Error("Unauthorized to delete this product");
+    }
+
     try {
       await db.delete(productTable).where(eq(productTable.id, parsedInput.id));
 
