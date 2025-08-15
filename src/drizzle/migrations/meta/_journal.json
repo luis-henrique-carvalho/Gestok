@@ -8,6 +8,20 @@
       "when": 1754959323049,
       "tag": "0000_cynical_punisher",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1755214868988,
+      "tag": "0001_add_products_and_stock_movments_table",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1755216593802,
+      "tag": "0002_fix_product_price",
+      "breakpoints": true
     }
   ]
 }
