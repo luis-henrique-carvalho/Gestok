@@ -8,15 +8,25 @@ export async function getValidSession() {
     headers: await headers(),
   });
 
-  if (!session) {
-    redirect("/login");
-  }
-
   return session;
 }
 
+export const requireActionAuth = async () => {
+  const session = await getValidSession();
+
+  if (!session) {
+    throw new Error("Não autorizado");
+  }
+
+  return session;
+};
+
 export async function requireFullAuth() {
   const session = await getValidSession();
+
+  if (!session) {
+    redirect("/login");
+  }
 
   return session;
 }

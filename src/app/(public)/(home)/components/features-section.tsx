@@ -42,7 +42,7 @@ export function FeaturesSection() {
                 </div>
 
                 <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-6 sm:mt-20 lg:mx-0 lg:max-w-none lg:grid-cols-2 xl:grid-cols-4">
-                    {features.map((feature, index) => (
+                    {features.map((feature) => (
                         <Card
                             key={feature.title}
                             className="group relative overflow-hidden border-0 bg-gradient-to-br from-card to-muted/30 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1"

@@ -1,10 +1,10 @@
 import { db } from "@/drizzle/db";
-import { user } from "@/drizzle/schema";
+import { userTable } from "@/drizzle/schema";
 import { eq } from "drizzle-orm";
 
 export async function getUsers() {
   try {
-    const users = await db.select().from(user);
+    const users = await db.select().from(userTable);
     return users;
   } catch (error) {
     console.error("Erro ao buscar usuários:", error);
@@ -14,7 +14,10 @@ export async function getUsers() {
 
 export async function getUserById(id: string) {
   try {
-    const result = await db.select().from(user).where(eq(user.id, id));
+    const result = await db
+      .select()
+      .from(userTable)
+      .where(eq(userTable.id, id));
     return result[0] || null;
   } catch (error) {
     console.error("Erro ao buscar usuário:", error);

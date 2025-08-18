@@ -1,6 +1,5 @@
 import { getValidSession } from "@/lib/auth-utils";
-import { Card, CardContent } from "@/components/ui/card";
-import { CheckCircle, Star, Zap, Shield, Crown, Building2 } from "lucide-react";
+import { CheckCircle, Star } from "lucide-react";
 
 import { SubscriptionPlan } from "@/app/(shared)/components/subscription-plan";
 
@@ -92,7 +91,7 @@ export default async function Home() {
                         {plans.map((plan) => (
                             <SubscriptionPlan
                                 key={plan.name}
-                                userEmail={session.user.email}
+                                userEmail={session?.user?.email ?? ""}
                                 planName={plan.name}
                                 planPrice={plan.price}
                                 planDescription={plan.description}

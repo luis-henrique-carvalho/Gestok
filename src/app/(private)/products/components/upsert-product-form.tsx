@@ -3,9 +3,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { NumericFormat, PatternFormat } from "react-number-format";
+import { NumericFormat } from "react-number-format";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -40,7 +40,7 @@ import {
   upsertProductSchema,
 } from "../schemas/upsert-product-schema";
 
-import { productTable, categoryTable } from "@/drizzle/schema";
+import { productTable } from "@/drizzle/schema";
 import { getCategories } from "@/app/(shared)/actions/categories/get-categories";
 
 
@@ -72,7 +72,6 @@ const UpsertProductForm = ({ product, onSuccess, isOpen }: UpsertProductFormProp
     resolver: zodResolver(upsertProductSchema),
     defaultValues: defaultValues,
   });
-
   useEffect(() => {
     if (isOpen) {
       form.reset({
@@ -86,6 +85,7 @@ const UpsertProductForm = ({ product, onSuccess, isOpen }: UpsertProductFormProp
           : categories?.data?.[0]?.id?.toString() || undefined,
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, form, product]);
 
   const upsertProductAction = useAction(upsertProduct, {

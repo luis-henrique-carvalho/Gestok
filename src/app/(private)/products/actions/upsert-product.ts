@@ -44,6 +44,8 @@ export const upsertProduct = actionClient
 
       return { success: true, message: "Produto salvo com sucesso!" };
     } catch (error: any) {
+      console.log(error);
+
       const constraintName = error.cause.constraint_name as string;
 
       const constraintMapping: Record<
