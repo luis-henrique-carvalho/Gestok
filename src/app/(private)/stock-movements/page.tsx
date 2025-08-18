@@ -9,38 +9,36 @@ import {
 } from "@/components/layout/page-container";
 import { DataTable } from "@/components/ui/data-table";
 import { requireFullAuth } from "@/lib/auth-utils";
-import { getProducts } from "./actions";
+import { getStockMovements } from "./actions/index";
 import { columns } from "./components/table/table-columns";
-import AddProductButton from "./components/add-product-button";
+import AddStockMovementButton from "./components/add-stock-movement-button";
 
-export default async function ProductsPage() {
+export default async function StockMovementsPage() {
     await requireFullAuth();
 
-    const productsResult = await getProducts({
-        limit: 50
-    });
-    const products = productsResult.data;
+    const stockMovementsResult = await getStockMovements({ limit: 10, offset: 0 });
+    const stockMovements = stockMovementsResult.data;
 
     return (
         <PageContainer>
             <PageHeader>
                 <PageHeaderContent>
-                    <PageTitle>Produtos</PageTitle>
+                    <PageTitle>Movimentações de Estoque</PageTitle>
                     <PageDescription>
-                        Gerencie seus produtos e estoque
+                        Gerencie as entradas e saídas de produtos no estoque
                     </PageDescription>
                 </PageHeaderContent>
                 <PageActions>
-                    <AddProductButton />
+                    <AddStockMovementButton />
                 </PageActions>
             </PageHeader>
             <PageContent>
                 <DataTable
                     columns={columns}
-                    data={(products?.data ?? []).map((p) => ({
-                        ...p,
-                        createdAt: new Date(p.createdAt),
-                        updatedAt: new Date(p.updatedAt),
+                    data={(stockMovements?.data?.data ?? []).map((m) => ({
+                        ...m,
+                        createdAt: new Date(m.createdAt),
+                        updatedAt: new Date(m.updatedAt),
                     }))}
                 />
             </PageContent>

@@ -23,6 +23,9 @@ export const upsertProduct = actionClient
       return { success: false, serverError: "Não autorizado." };
     }
 
+    console.log("ID DO USUÁRIO NO PRODUTO", productTable.userId);
+    console.log("ID DO USUÁRIO NO SESSION", session.user.id);
+
     try {
       await db
         .insert(productTable)
