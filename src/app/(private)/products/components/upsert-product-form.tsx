@@ -72,6 +72,7 @@ const UpsertProductForm = ({ product, onSuccess, isOpen }: UpsertProductFormProp
     resolver: zodResolver(upsertProductSchema),
     defaultValues: defaultValues,
   });
+
   useEffect(() => {
     if (isOpen) {
       form.reset({
