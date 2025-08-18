@@ -7,20 +7,20 @@ export function HeroSection() {
             <div className="mx-auto max-w-4xl text-center">
                 <div className="mb-8">
                     <div className="inline-flex items-center rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary ring-1 ring-primary/20">
-                        <span>🚀 Novo template disponível</span>
+                        <span>📦 Sistema Completo de Estoque</span>
                     </div>
                 </div>
 
                 <h1 className="font-heading text-4xl font-bold tracking-tight text-foreground sm:text-6xl lg:text-7xl">
-                    Lance seu próximo projeto{" "}
+                    Gerencie seu{" "}
                     <span className="bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-                        SaaS em minutos
+                        estoque de mercado
                     </span>
                 </h1>
 
                 <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-muted-foreground sm:text-xl">
-                    Um boilerplate de nível de produção, poderoso e pronto para escalar, construído com as tecnologias mais
-                    modernas. Ideal para desenvolvedores que querem focar na lógica de negócios, e não na configuração.
+                    Sistema completo para controle de estoque, movimentações e produtos. Ideal para mercados,
+                    mercearias e pequenos comércios que precisam de uma solução simples e eficiente.
                 </p>
 
                 <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
@@ -28,7 +28,7 @@ export function HeroSection() {
                         size="lg"
                         className="group bg-primary px-8 py-3 text-base font-semibold hover:bg-primary/90 hover:scale-105 transition-all duration-200"
                     >
-                        Comece a construir agora
+                        Começar agora
                         <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                     </Button>
 
@@ -38,7 +38,7 @@ export function HeroSection() {
                         className="group px-8 py-3 text-base font-semibold hover:bg-accent transition-all duration-200 bg-transparent"
                     >
                         <Github className="mr-2 h-4 w-4" />
-                        Acesse no GitHub
+                        Ver código fonte
                     </Button>
                 </div>
 
@@ -47,7 +47,7 @@ export function HeroSection() {
                         variant="ghost"
                         className="group text-sm text-muted-foreground hover:text-foreground transition-colors"
                     >
-                        Veja a demo ao vivo
+                        Ver demonstração
                         <ExternalLink className="ml-1 h-3 w-3 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                     </Button>
                 </div>

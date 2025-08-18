@@ -78,7 +78,7 @@ const UpsertStockMovementForm = ({
             limit: 50
         }),
         enabled: isProductSelectOpen,
-        staleTime: 1000 * 60 * 5, // 5 minutos
+        staleTime: 1000 * 60 * 5,
     });
 
     const defaultValues = {

@@ -4,24 +4,24 @@ import { Clock, Shield, Sparkles, Rocket } from "lucide-react"
 const benefits = [
     {
         icon: Clock,
-        title: "Economize semanas de trabalho",
+        title: "Economize tempo diário",
         description:
-            "Esqueça a configuração inicial. O template já vem com autenticação, gerenciamento de usuários e estrutura de banco de dados.",
+            "Automatize processos manuais de controle de estoque. Cadastro rápido de produtos e movimentações em segundos.",
     },
     {
         icon: Shield,
-        title: "Totalmente Type-Safe",
-        description: "Da API ao banco de dados, garanta a segurança e a manutenibilidade do seu código com TypeScript.",
+        title: "Controle total e seguro",
+        description: "Acompanhe cada movimentação com histórico completo. Sistema seguro com backup automático dos dados.",
     },
     {
         icon: Sparkles,
-        title: "Design Profissional",
-        description: "Com Shadcn UI, sua aplicação já nasce com uma aparência moderna e profissional.",
+        title: "Interface intuitiva",
+        description: "Design moderno e fácil de usar. Acessível em qualquer dispositivo, desktop ou mobile.",
     },
     {
         icon: Rocket,
-        title: "Pronto para Produção",
-        description: "Estrutura otimizada para deployment em plataformas como Vercel e AWS.",
+        title: "Crescimento do negócio",
+        description: "Tome decisões baseadas em dados reais. Otimize seu estoque e aumente a lucratividade.",
     },
 ]
 
@@ -31,10 +31,10 @@ export function BenefitsSection() {
             <div className="mx-auto max-w-7xl px-6 lg:px-8">
                 <div className="mx-auto max-w-2xl text-center">
                     <h2 className="font-heading text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-                        Por que escolher nosso template?
+                        Por que escolher nosso sistema?
                     </h2>
                     <p className="mt-4 text-lg leading-8 text-muted-foreground">
-                        Benefícios que aceleram seu desenvolvimento e garantem qualidade
+                        Benefícios que transformam a gestão do seu estoque
                     </p>
                 </div>
 

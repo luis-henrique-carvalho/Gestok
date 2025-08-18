@@ -1,30 +1,30 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Database, Zap, Layers, Palette } from "lucide-react"
+import { Package, TrendingUp, BarChart3, Settings } from "lucide-react"
 
 const features = [
     {
-        icon: Zap,
-        title: "Next.js",
+        icon: Package,
+        title: "Controle de Produtos",
         description:
-            "Performance e SEO de ponta com a framework React mais amada pelos desenvolvedores. Renderização no servidor (SSR) e geração de sites estáticos (SSG) prontas para usar.",
+            "Cadastre e gerencie todos os seus produtos com facilidade. Códigos de barras, categorias, preços e informações detalhadas em um só lugar.",
     },
     {
-        icon: Database,
-        title: "PostgreSQL",
+        icon: TrendingUp,
+        title: "Movimentações de Estoque",
         description:
-            "O banco de dados relacional open-source mais avançado do mundo. Confiabilidade, robustez e escalabilidade para sua aplicação.",
+            "Acompanhe entradas, saídas e transferências de produtos. Histórico completo de todas as movimentações com data e responsável.",
     },
     {
-        icon: Layers,
-        title: "Drizzle ORM & Prisma",
+        icon: BarChart3,
+        title: "Relatórios e Analytics",
         description:
-            "Escolha o seu ORM preferido ou use ambos. Oferecemos uma integração perfeita para um acesso ao banco de dados totalmente type-safe, com autocomplete e segurança.",
+            "Visualize o desempenho do seu estoque com relatórios detalhados. Produtos mais vendidos, estoque baixo e análise de tendências.",
     },
     {
-        icon: Palette,
-        title: "Shadcn UI",
+        icon: Settings,
+        title: "Configurações Avançadas",
         description:
-            "Componentes de UI elegantes, acessíveis e totalmente personalizáveis. Construa uma interface bonita e moderna sem esforço.",
+            "Personalize o sistema conforme suas necessidades. Alertas de estoque mínimo, múltiplos usuários e backup automático.",
     },
 ]
 
@@ -34,10 +34,10 @@ export function FeaturesSection() {
             <div className="mx-auto max-w-7xl px-6 lg:px-8">
                 <div className="mx-auto max-w-2xl text-center">
                     <h2 className="font-heading text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-                        Tecnologias de ponta para seu sucesso
+                        Funcionalidades essenciais para seu negócio
                     </h2>
                     <p className="mt-4 text-lg leading-8 text-muted-foreground">
-                        Construído com as melhores ferramentas do ecossistema moderno de desenvolvimento
+                        Tudo que você precisa para gerenciar seu estoque de forma eficiente e profissional
                     </p>
                 </div>
 
