@@ -36,6 +36,7 @@ export const upsertProduct = actionClient
           set: {
             ...parsedInput,
             categoryId: Number(parsedInput.categoryId),
+            userId: session.user.id,
           },
           where: eq(productTable.userId, session.user.id),
         });
