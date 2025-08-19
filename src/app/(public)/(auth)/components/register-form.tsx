@@ -22,7 +22,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
-import { SocialLoginButtons } from "./social-login-buttons";
 
 
 
@@ -69,9 +68,9 @@ export function RegisterForm({
             <form onSubmit={form.handleSubmit(onSubmit)} className="p-6 md:p-8">
               <div className="flex flex-col gap-6">
                 <div className="flex flex-col items-center text-center">
-                  <h1 className="text-2xl font-bold">Create your account</h1>
+                  <h1 className="text-2xl font-bold">Crie sua conta</h1>
                   <p className="text-muted-foreground text-balance">
-                    Register to access Acme Inc
+                    Registre-se para acessar o sistema
                   </p>
                 </div>
                 <div className="grid gap-2">
@@ -80,9 +79,9 @@ export function RegisterForm({
                     name="name"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Name</FormLabel>
+                        <FormLabel>Nome</FormLabel>
                         <FormControl>
-                          <Input placeholder="Your name" {...field} />
+                          <Input placeholder="Digite seu nome" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -95,7 +94,7 @@ export function RegisterForm({
                     name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>email</FormLabel>
+                        <FormLabel>Email</FormLabel>
                         <FormControl>
                           <Input placeholder="email@teste.com" {...field} />
                         </FormControl>
@@ -110,10 +109,10 @@ export function RegisterForm({
                     name="password"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>password</FormLabel>
+                        <FormLabel>Senha</FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="password"
+                            placeholder="Digite sua senha"
                             type="password"
                             {...field}
                           />
@@ -132,7 +131,7 @@ export function RegisterForm({
                         <FormLabel>Confirm password</FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="Confirm your password"
+                            placeholder="Confirme sua senha"
                             type="password"
                             {...field}
                           />
@@ -150,28 +149,30 @@ export function RegisterForm({
                   {form.formState.isSubmitting ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Creating account...
+                      Criando conta...
                     </>
                   ) : (
-                    "Create account"
+                    "Criar conta"
                   )}
                 </Button>
+                <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
+                  <span className="bg-background text-muted-foreground relative z-10 px-2">
+                    Ou continue com
+                  </span>
+                </div>
+
+                <div className="text-center text-sm">
+                  Já tem uma conta?{" "}
+                  <Link href="/login" className="underline underline-offset-4">
+                    Entrar
+                  </Link>
+                </div>
               </div>
             </form>
           </Form>
-
-          <div className="text-center text-sm">
-            Already have an account?{" "}
-            <Link href="/login" className="underline underline-offset-4">
-              Login
-            </Link>
-          </div>
-
-          <SocialLoginButtons />
-
           <div className="bg-muted relative hidden md:block">
             <Image
-              src="/placeholder.svg"
+              src="/login.png"
               alt="Image"
               fill
               className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
@@ -182,9 +183,9 @@ export function RegisterForm({
         </CardContent>
       </Card>
       <div className="text-muted-foreground hover:[&_a]:text-primary text-center text-xs text-balance [&_a]:underline [&_a]:underline-offset-4">
-        By clicking continue, you agree to our{" "}
-        <Link href="#">Terms of Service</Link> and{" "}
-        <Link href="#">Privacy Policy</Link>.
+        Ao continuar, você concorda com nossos{" "}
+        <Link href="#">Termos de Serviço</Link> e{" "}
+        <Link href="#">Política de Privacidade</Link>.
       </div>
     </div>
   );

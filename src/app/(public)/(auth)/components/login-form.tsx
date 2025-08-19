@@ -63,9 +63,9 @@ export function LoginForm({
               <form onSubmit={form.handleSubmit(onSubmit)}>
                 <div className="flex flex-col gap-6">
                   <div className="flex flex-col items-center text-center">
-                    <h1 className="text-2xl font-bold">Welcome back</h1>
+                    <h1 className="text-2xl font-bold">Bem vindo de volta</h1>
                     <p className="text-muted-foreground text-balance">
-                      Login to your Acme Inc account
+                      Faça login para acessar o sistema
                     </p>
                   </div>
 
@@ -75,7 +75,7 @@ export function LoginForm({
                       name="email"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>email</FormLabel>
+                          <FormLabel>Email</FormLabel>
                           <FormControl>
                             <Input placeholder="email@teste.com" {...field} />
                           </FormControl>
@@ -91,10 +91,10 @@ export function LoginForm({
                       name="password"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>password</FormLabel>
+                          <FormLabel>Senha</FormLabel>
                           <FormControl>
                             <Input
-                              placeholder="password"
+                              placeholder="Digite sua senha"
                               type="password"
                               {...field}
                             />
@@ -113,7 +113,7 @@ export function LoginForm({
                     {form.formState.isSubmitting ? (
                       <Loader2 className="m-2 h-4 w-4 animate-spin" />
                     ) : (
-                      "Login"
+                      "Entrar"
                     )}
                   </Button>
                 </div>
@@ -123,16 +123,16 @@ export function LoginForm({
             <div className="flex flex-col gap-6">
               <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
                 <span className="bg-background text-muted-foreground relative z-10 px-2">
-                  Or continue with
+                  Ou continue com
                 </span>
               </div>
 
-              <SocialLoginButtons />
+              {/* <SocialLoginButtons /> */}
 
               <div className="text-center text-sm">
-                Don&apos;t have an account?{" "}
+                Não tem uma conta?{" "}
                 <Link href="/register" className="underline underline-offset-4">
-                  Sign up
+                  Cadastre-se
                 </Link>
               </div>
             </div>
@@ -140,7 +140,7 @@ export function LoginForm({
 
           <div className="bg-muted relative hidden md:block">
             <Image
-              src="/placeholder.svg"
+              src="/login.png"
               alt="Image"
               fill
               className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
@@ -151,9 +151,9 @@ export function LoginForm({
         </CardContent>
       </Card>
       <div className="text-muted-foreground hover:[&_a]:text-primary text-center text-xs text-balance [&_a]:underline [&_a]:underline-offset-4">
-        By clicking continue, you agree to our{" "}
-        <Link href="#">Terms of Service</Link> and{" "}
-        <Link href="#">Privacy Policy</Link>.
+        Ao continuar, você concorda com nossos{" "}
+        <Link href="#">Termos de Serviço</Link> e{" "}
+        <Link href="#">Política de Privacidade</Link>.
       </div>
     </div>
   );
