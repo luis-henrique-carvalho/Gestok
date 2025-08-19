@@ -49,7 +49,7 @@ export const getProducts = actionClient
 
       return {
         data: products,
-        sucess: true,
+        success: true,
         page,
         limit,
         totalItems: totalCount[0].count,
@@ -59,7 +59,7 @@ export const getProducts = actionClient
     } catch (error) {
       console.error("Erro ao buscar produtos:", error);
       return {
-        sucess: false,
+        success: false,
         data: [],
         page,
         limit,

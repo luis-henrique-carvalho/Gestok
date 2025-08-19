@@ -28,9 +28,10 @@ interface ProductsPageProps {
 export default async function ProductsPage({ searchParams }: ProductsPageProps) {
     await requireFullAuth();
 
-    const currentPage = Number(searchParams.page) || DEFAULT_PAGE;
-    const currentLimit = Number(searchParams.limit) || DEFAULT_LIMIT;
-    const searchName = searchParams.search || "";
+    const params = await searchParams
+    const currentPage = params.page || DEFAULT_PAGE;
+    const currentLimit = params?.limit || DEFAULT_LIMIT;
+    const searchName = params?.search || "";
 
     const productsResult = await getProducts({
         limit: currentLimit,

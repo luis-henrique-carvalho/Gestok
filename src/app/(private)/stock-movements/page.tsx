@@ -27,8 +27,9 @@ interface StockMovementsPageProps {
 export default async function StockMovementsPage({ searchParams }: StockMovementsPageProps) {
     await requireFullAuth();
 
-    const currentPage = Number(searchParams.page) || DEFAULT_PAGE;
-    const currentLimit = Number(searchParams.limit) || DEFAULT_LIMIT;
+    const params = await searchParams
+    const currentPage = params.page || DEFAULT_PAGE;
+    const currentLimit = params?.limit || DEFAULT_LIMIT;
 
     const stockMovementsResult = await getStockMovements({ limit: currentLimit, page: currentPage });
     const stockMovements = stockMovementsResult.data;

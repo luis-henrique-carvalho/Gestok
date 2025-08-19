@@ -42,7 +42,7 @@ export const getStockMovements = actionClient
 
       return {
         data: stockMovements,
-        sucess: true,
+        success: true,
         page,
         limit,
         totalItems: totalCount[0].count,
@@ -52,7 +52,7 @@ export const getStockMovements = actionClient
     } catch (error) {
       console.error("Erro ao buscar movimentações de estoque:", error);
       return {
-        sucess: false,
+        success: false,
         data: [],
         page,
         limit,
