@@ -30,7 +30,7 @@ export default async function StockMovementsPage({ searchParams }: StockMovement
     const { query, page } = await searchParams;
 
     if (!page) {
-        return redirect("/inventory?page=1");
+        return redirect("/stock-movements?page=1");
     }
 
     const { data } = await getStockMovements({

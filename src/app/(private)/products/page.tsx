@@ -31,7 +31,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
     const { query, page } = await searchParams;
 
     if (!page) {
-        return redirect("/inventory?page=1");
+        return redirect("/products?page=1");
     }
 
     const { data } = await getProducts({
