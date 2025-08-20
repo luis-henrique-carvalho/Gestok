@@ -13,33 +13,34 @@ import { getProducts } from "./actions";
 import { columns } from "./components/table/table-columns";
 import AddProductButton from "./components/add-product-button";
 import DynamicPagination from "@/components/layout/dinamic-pagination";
+import SearchInput from "@/components/layout/search-input";
+import { redirect } from "next/navigation";
 
-const DEFAULT_PAGE = 1;
-const DEFAULT_LIMIT = 20;
+const DEFAULT_LIMIT = 10;
 
 interface ProductsPageProps {
     searchParams: {
         page?: string;
-        limit?: string;
-        search?: string;
+        query?: string;
     }
 }
 
 export default async function ProductsPage({ searchParams }: ProductsPageProps) {
     await requireFullAuth();
 
-    const params = await searchParams
-    const currentPage = params.page || DEFAULT_PAGE;
-    const currentLimit = params?.limit || DEFAULT_LIMIT;
-    const searchName = params?.search || "";
+    const { query, page } = await searchParams;
 
-    const productsResult = await getProducts({
-        limit: currentLimit,
-        page: currentPage,
-        searchName,
+    if (!page) {
+        return redirect("/inventory?page=1");
+    }
+
+    const { data } = await getProducts({
+        limit: String(DEFAULT_LIMIT),
+        page: String(query ? 1 : page),
+        query,
     });
 
-    if (!productsResult.data) {
+    if (!data?.products) {
         return (
             <PageContainer>
                 <PageHeader>
@@ -64,7 +65,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
         );
     }
 
-    const products = productsResult.data;
+    const products = data.products;
 
     return (
         <PageContainer>
@@ -80,9 +81,12 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
                 </PageActions>
             </PageHeader>
             <PageContent>
+                <SearchInput
+                    placeholder="Buscar produtos..."
+                />
                 <DataTable
                     columns={columns}
-                    data={(products.data ?? []).map((p) => ({
+                    data={(products).map((p) => ({
                         ...p,
                         createdAt: new Date(p.createdAt),
                         updatedAt: new Date(p.updatedAt),
@@ -90,8 +94,8 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
                 />
                 <div className="mt-6">
                     <DynamicPagination
-                        currentPage={products.page || DEFAULT_PAGE}
-                        totalPages={Math.max(products.totalPages || 1, 1)}
+                        currentPage={data.pagination.page}
+                        totalPages={Math.max(data.pagination.totalPages, 1)}
                     />
                 </div>
             </PageContent>

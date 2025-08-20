@@ -10,21 +10,21 @@ import { requireActionAuth } from "@/lib/auth-utils";
 const GetProductsSchema = z.object({
   page: z.coerce.number().int().positive().default(1),
   limit: z.coerce.number().int().positive().default(10),
-  searchName: z.string().optional().default(""),
+  query: z.string().optional().default(""),
 });
 
 export const getProducts = actionClient
   .inputSchema(GetProductsSchema)
   .action(async ({ parsedInput }) => {
-    const { searchName, page, limit } = parsedInput;
+    const { query, page, limit } = parsedInput;
 
     try {
       const session = await requireActionAuth();
 
       const userId = session.user.id;
 
-      const filterCondition = searchName
-        ? like(productTable.name, `%${searchName}%`)
+      const filterCondition = query
+        ? like(productTable.name, `%${query}%`)
         : undefined;
 
       const offset = (page - 1) * limit;
@@ -48,24 +48,20 @@ export const getProducts = actionClient
         .where(and(filterCondition, eq(productTable.userId, userId)));
 
       return {
-        data: products,
         success: true,
-        page,
-        limit,
-        totalItems: totalCount[0].count,
-        totalPages: Math.ceil(totalCount[0].count / limit),
-        message: "Produtos buscados com sucesso!",
+        products,
+        pagination: {
+          page,
+          limit,
+          totalItems: totalCount[0].count,
+          totalPages: Math.ceil(totalCount[0].count / limit),
+        },
       };
     } catch (error) {
       console.error("Erro ao buscar produtos:", error);
       return {
         success: false,
-        data: [],
-        page,
-        limit,
-        totalItems: 0,
-        totalPages: 0,
-        message: "Ocorreu um erro ao buscar os produtos.",
+        serverError: "Erro interno do servidor",
       };
     }
   });
