@@ -1,10 +1,13 @@
 import { Button } from "@/components/ui/button";
+import { getValidSession } from "@/lib/auth-utils";
 import { CircleIcon } from "lucide-react";
 import Link from "next/link";
 
 
 
-function Header() {
+const Header = async () => {
+  const session = await getValidSession();
+
   return (
     <header className="border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
@@ -14,7 +17,11 @@ function Header() {
         </Link>
         <div className="flex items-center space-x-4">
           <Button asChild className="rounded-full">
-            <Link href="/login">Entrar</Link>
+            {session ? (
+              <Link href="/dashboard">Dashboard</Link>
+            ) : (
+              <Link href="/login">Entrar</Link>
+            )}
           </Button>
         </div>
       </div>

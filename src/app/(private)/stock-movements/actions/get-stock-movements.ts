@@ -1,75 +1,58 @@
 "use server";
 
 import { z } from "zod";
-import { headers } from "next/headers";
-import { auth } from "@/lib/auth";
-import { actionClient } from "@/lib/safe-action";
 import { db } from "@/drizzle/db";
 import { stockMovementsTable, productTable } from "@/drizzle/schema";
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, count } from "drizzle-orm";
+import { actionClient } from "@/lib/safe-action";
+import { requireActionAuth } from "@/lib/auth-utils";
 
-const getStockMovementsSchema = z.object({
-  limit: z.number().min(1).max(100).default(10),
-  offset: z.number().min(0).default(0),
+const GetStockMovementsSchema = z.object({
+  page: z.coerce.number().int().positive().default(1),
+  limit: z.coerce.number().int().positive().default(10),
 });
 
 export const getStockMovements = actionClient
-  .inputSchema(getStockMovementsSchema)
+  .inputSchema(GetStockMovementsSchema)
   .action(async ({ parsedInput }) => {
-    const session = await auth.api.getSession({
-      headers: await headers(),
-    });
-
-    if (!session) {
-      return { success: false, serverError: "Não autorizado." };
-    }
+    const { page, limit } = parsedInput;
 
     try {
-      const stockMovements = await db
-        .select({
-          id: stockMovementsTable.id,
-          quantity: stockMovementsTable.quantity,
-          movementType: stockMovementsTable.movementType,
-          movementReason: stockMovementsTable.movementReason,
-          productId: stockMovementsTable.productId,
-          userId: stockMovementsTable.userId,
-          createdAt: stockMovementsTable.createdAt,
-          updatedAt: stockMovementsTable.updatedAt,
-          product: {
-            id: productTable.id,
-            name: productTable.name,
-            sku: productTable.sku,
-          },
-        })
-        .from(stockMovementsTable)
-        .leftJoin(
-          productTable,
-          eq(stockMovementsTable.productId, productTable.id)
-        )
-        .where(eq(stockMovementsTable.userId, session.user.id))
-        .orderBy(desc(stockMovementsTable.createdAt))
-        .limit(parsedInput.limit)
-        .offset(parsedInput.offset);
+      const session = await requireActionAuth();
+      const userId = session.user.id;
+      const offset = (page - 1) * limit;
 
-      const total = await db
-        .select({ count: stockMovementsTable.id })
+      const stockMovements = await db.query.stockMovementsTable.findMany({
+        where: eq(stockMovementsTable.userId, userId),
+        limit,
+        with: {
+          product: true,
+          user: true,
+        },
+        offset,
+        orderBy: (table) => desc(table.createdAt),
+      });
+
+      const totalCount = await db
+        .select({ count: count() })
         .from(stockMovementsTable)
-        .where(eq(stockMovementsTable.userId, session.user.id));
+        .where(eq(stockMovementsTable.userId, userId));
 
       return {
+        stockMovements,
         success: true,
-        data: {
-          data: stockMovements,
-          total: total.length,
-          limit: parsedInput.limit,
-          offset: parsedInput.offset,
+        pagination: {
+          page,
+          limit,
+          totalItems: totalCount[0].count,
+          totalPages: Math.ceil(totalCount[0].count / limit),
         },
       };
     } catch (error) {
-      console.error("Error getting stock movements:", error);
+      console.error("Erro ao buscar movimentações de estoque:", error);
       return {
         success: false,
-        serverError: "Erro ao buscar movimentações de estoque",
+        serverError: "Erro ao buscar movimentações de estoque.",
       };
     }
   });

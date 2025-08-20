@@ -6,6 +6,7 @@ import {
   LogOut,
   Package,
   TrendingUp,
+  ClipboardList,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -42,6 +43,11 @@ const items = [
     title: "Produtos",
     url: "/products",
     icon: Package,
+  },
+  {
+    title: "Inventário",
+    url: "/inventory",
+    icon: ClipboardList,
   },
   {
     title: "Movimentações",
@@ -84,24 +90,6 @@ export function AppSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-        <SidebarGroup>
-          <SidebarGroupLabel>Outros</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  asChild
-                  isActive={pathname === "/subscriptions"}
-                >
-                  <Link href="/subscriptions">
-                    <Gem />
-                    <span>Assinatura</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

@@ -38,7 +38,7 @@ export const columns: ColumnDef<StockMovement>[] = [
 
             return (
                 <span className={movementType === "out" ? "text-red-600" : "text-green-600"}>
-                    {movementType === "out" ? "-" : "+"}{quantity}
+                    {movementType === "out" ? "-" : "+"}{quantity} un
                 </span>
             );
         },

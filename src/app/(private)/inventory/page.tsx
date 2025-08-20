@@ -1,5 +1,4 @@
 import {
-    PageActions,
     PageContainer,
     PageContent,
     PageDescription,
@@ -9,55 +8,52 @@ import {
 } from "@/components/layout/page-container";
 import { DataTable } from "@/components/ui/data-table";
 import { requireFullAuth } from "@/lib/auth-utils";
-import { getProducts } from "./actions";
+import { getInventory } from "./actions";
 import { columns } from "./components/table/table-columns";
-import AddProductButton from "./components/add-product-button";
 import DynamicPagination from "@/components/layout/dinamic-pagination";
 import SearchInput from "@/components/layout/search-input";
+import { Suspense } from "react";
+import { InvoicesTableSkeleton } from "./components/invoices-table-skeleton";
 import { redirect } from "next/navigation";
 
 const DEFAULT_LIMIT = 10;
-
-export default async function ProductsPage({
-    searchParams,
-}: {
+interface InventoryPageProps {
     searchParams: Promise<{
         query?: string;
         page?: string;
     }>;
-}) {
+}
+
+const InventoryPage = async ({ searchParams }: InventoryPageProps) => {
     await requireFullAuth();
 
     const { query, page } = await searchParams;
 
     if (!page) {
-        return redirect("/products?page=1");
+        return redirect("/inventory?page=1");
     }
 
-    const { data } = await getProducts({
+    const { data } = await getInventory({
         limit: String(DEFAULT_LIMIT),
         page: String(query ? 1 : page),
         query,
     });
 
-    if (!data?.products) {
+    if (!data?.inventory) {
         return (
             <PageContainer>
                 <PageHeader>
                     <PageHeaderContent>
-                        <PageTitle>Produtos</PageTitle>
+                        <PageTitle>Inventário</PageTitle>
                         <PageDescription>
                             Gerencie seus produtos e estoque
                         </PageDescription>
                     </PageHeaderContent>
-                    <PageActions>
-                        <AddProductButton />
-                    </PageActions>
                 </PageHeader>
                 <PageContent>
                     <div className="text-center py-8">
                         <p className="text-muted-foreground">
-                            Erro ao carregar produtos. Tente novamente.
+                            Erro ao carregar inventário. Tente novamente.
                         </p>
                     </div>
                 </PageContent>
@@ -65,40 +61,38 @@ export default async function ProductsPage({
         );
     }
 
-    const products = data.products;
+    const inventory = data.inventory;
 
     return (
         <PageContainer>
             <PageHeader>
                 <PageHeaderContent>
-                    <PageTitle>Produtos</PageTitle>
+                    <PageTitle>Inventário</PageTitle>
                     <PageDescription>
                         Gerencie seus produtos e estoque
                     </PageDescription>
                 </PageHeaderContent>
-                <PageActions>
-                    <AddProductButton />
-                </PageActions>
             </PageHeader>
             <PageContent>
-                <SearchInput
-                    placeholder="Buscar produtos..."
-                />
-                <DataTable
-                    columns={columns}
-                    data={(products).map((p) => ({
-                        ...p,
-                        createdAt: new Date(p.createdAt),
-                        updatedAt: new Date(p.updatedAt),
-                    }))}
-                />
-                <div className="mt-6">
+                <Suspense
+                    key={`${query ?? ''}-${page ?? ''}`}
+                    fallback={<InvoicesTableSkeleton />}
+                >
+                    <SearchInput
+                        placeholder="Buscar produtos..."
+                    />
+                    <DataTable
+                        columns={columns}
+                        data={inventory}
+                    />
                     <DynamicPagination
                         currentPage={data.pagination.page}
                         totalPages={Math.max(data.pagination.totalPages, 1)}
                     />
-                </div>
+                </Suspense>
             </PageContent>
         </PageContainer>
     );
 }
+
+export default InventoryPage;

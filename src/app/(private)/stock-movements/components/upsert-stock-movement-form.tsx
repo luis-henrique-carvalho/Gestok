@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2, Check, ChevronsUpDown } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
 import { toast } from "sonner";
@@ -71,22 +71,24 @@ const UpsertStockMovementForm = ({
     const [searchTerm, setSearchTerm] = useState("");
     const [isProductSelectOpen, setIsProductSelectOpen] = useState(false);
 
-    const { data: products, isLoading } = useQuery({
+    const { data, isLoading } = useQuery({
         queryKey: ["get-products", searchTerm],
         queryFn: async () => await getProducts({
-            searchName: searchTerm,
+            query: searchTerm,
             limit: 50
         }),
         enabled: isProductSelectOpen,
         staleTime: 1000 * 60 * 5,
     });
 
+    const products = data?.data?.products;
+
     const defaultValues = {
         id: stockMovement?.id,
         quantity: stockMovement?.quantity || 1,
         movementType: stockMovement?.movementType || "in",
         movementReason: stockMovement?.movementReason || "supplier_purchase",
-        productId: stockMovement?.productId || products?.data?.data?.[0]?.id || undefined,
+        productId: stockMovement?.productId || products?.[0]?.id || undefined,
     }
 
     const form = useForm<UpsertStockMovementFormData>({
@@ -102,16 +104,10 @@ const UpsertStockMovementForm = ({
                 quantity: stockMovement?.quantity || 1,
                 movementType: stockMovement?.movementType || "in",
                 movementReason: stockMovement?.movementReason || "supplier_purchase",
-                productId: stockMovement?.productId || products?.data?.data?.[0]?.id || undefined,
+                productId: stockMovement?.productId || products?.[0]?.id || undefined,
             });
         }
     }, [isOpen, form, stockMovement]);
-
-    useEffect(() => {
-        if (!isProductSelectOpen) {
-            setSearchTerm("");
-        }
-    }, [isProductSelectOpen]);
 
     const upsertStockMovementAction = useAction(upsertStockMovement, {
         onSuccess: ({ data }) => {
@@ -173,7 +169,7 @@ const UpsertStockMovementForm = ({
                                                     )}
                                                 >
                                                     {field.value
-                                                        ? products?.data?.data?.find((p) => p.id === field.value)?.name ?? "Selecione um produto"
+                                                        ? products?.find((p) => p.id === field.value)?.name ?? "Selecione um produto"
                                                         : "Selecione um produto"}
                                                     <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
                                                 </Button>
@@ -188,30 +184,41 @@ const UpsertStockMovementForm = ({
                                                     className="h-9"
                                                 />
                                                 <CommandList>
-                                                    <CommandEmpty>Nenhum produto encontrado.</CommandEmpty>
-                                                    <CommandGroup>
-                                                        {products?.data?.data?.map((product) => (
-                                                            <CommandItem
-                                                                key={product.id}
-                                                                value={`${product.name} ${product.sku}`}
-                                                                onSelect={() => {
-                                                                    field.onChange(product.id);
-                                                                    setIsProductSelectOpen(false);
-                                                                    setSearchTerm("");
-                                                                }}
-                                                            >
-                                                                {product.name} ({product.sku})
-                                                                <Check
-                                                                    className={cn(
-                                                                        "ml-auto",
-                                                                        field.value === product.id
-                                                                            ? "opacity-100"
-                                                                            : "opacity-0"
-                                                                    )}
-                                                                />
-                                                            </CommandItem>
-                                                        ))}
-                                                    </CommandGroup>
+                                                    {isLoading ? (
+                                                        <div className="flex items-center justify-center py-6">
+                                                            <Loader2 className="h-4 w-4 animate-spin" />
+                                                            <span className="ml-2 text-sm text-muted-foreground">
+                                                                Carregando produtos...
+                                                            </span>
+                                                        </div>
+                                                    ) : (
+                                                        <>
+                                                            <CommandEmpty>Nenhum produto encontrado.</CommandEmpty>
+                                                            <CommandGroup>
+                                                                {products?.map((product) => (
+                                                                    <CommandItem
+                                                                        key={product.id}
+                                                                        value={`${product.name} ${product.sku}`}
+                                                                        onSelect={() => {
+                                                                            field.onChange(product.id);
+                                                                            setIsProductSelectOpen(false);
+                                                                            setSearchTerm("");
+                                                                        }}
+                                                                    >
+                                                                        {product.name} ({product.sku})
+                                                                        <Check
+                                                                            className={cn(
+                                                                                "ml-auto",
+                                                                                field.value === product.id
+                                                                                    ? "opacity-100"
+                                                                                    : "opacity-0"
+                                                                            )}
+                                                                        />
+                                                                    </CommandItem>
+                                                                ))}
+                                                            </CommandGroup>
+                                                        </>
+                                                    )}
                                                 </CommandList>
                                             </Command>
                                         </PopoverContent>

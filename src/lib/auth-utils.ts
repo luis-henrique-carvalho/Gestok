@@ -30,3 +30,13 @@ export async function requireFullAuth() {
 
   return session;
 }
+
+export async function requirePublicAuth() {
+  const session = await getValidSession();
+
+  if (session) {
+    redirect("/dashboard");
+  }
+
+  return session;
+}
