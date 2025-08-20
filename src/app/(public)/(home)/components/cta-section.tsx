@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { ArrowRight, Github, Star, Zap, Shield } from "lucide-react"
+import { ArrowRight, Star, Zap, Shield } from "lucide-react"
 
 export function CTASection() {
     return (

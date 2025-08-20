@@ -1,5 +1,4 @@
 import dayjs from "dayjs";
-import { Calendar } from "lucide-react";
 import { redirect } from "next/navigation";
 import React from "react";
 
@@ -12,13 +11,13 @@ import {
     PageHeaderContent,
     PageTitle,
 } from "@/components/layout/page-container";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { DataTable } from "@/components/ui/data-table";
 import { requireFullAuth } from "@/lib/auth-utils";
 
 import { DatePicker } from "./components/date-picker";
 import StatsCards from "./components/status-card";
+import { StockMovementsTable } from "./components/stock-movements-table";
 import { getDashboard } from "./actions";
+import { StockMovementsAreaChart } from "./components/stock-movements-area-chart";
 
 interface DashboardPageProps {
     searchParams: Promise<{
@@ -34,7 +33,7 @@ const Dashboard = async ({ searchParams }: DashboardPageProps) => {
 
     if (!from || !to) {
         redirect(
-            `/dashboard?from=${dayjs().format("YYYY-MM-DD")}&to=${dayjs().add(1, "month").format("YYYY-MM-DD")}`,
+            `/dashboard?from=${dayjs().subtract(6, "month").format("YYYY-MM-DD")}&to=${dayjs().format("YYYY-MM-DD")}`,
         );
     }
 
@@ -55,7 +54,8 @@ const Dashboard = async ({ searchParams }: DashboardPageProps) => {
         lowStockProducts,
         outOfStockProducts,
         stockQuantity,
-        latestStockMovements
+        latestStockMovements,
+        monthStockMovements
     } = data;
 
 
@@ -79,6 +79,12 @@ const Dashboard = async ({ searchParams }: DashboardPageProps) => {
                     outOfStockProducts={outOfStockProducts ?? 0}
                     stockQuantity={stockQuantity ?? 0}
                 />
+
+                <div className="grid grid-cols-1 gap-4 lg:grid-cols-[2.25fr_1fr]">
+                    <StockMovementsAreaChart stockMovements={monthStockMovements ?? []} />
+                    <StockMovementsTable stockMovements={latestStockMovements ?? []} />
+                </div>
+
             </PageContent>
         </PageContainer>
     );

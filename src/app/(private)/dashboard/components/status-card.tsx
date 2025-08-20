@@ -42,7 +42,7 @@ const StatsCards = ({
     {
       title: "Estoque",
       value: stockQuantity,
-      subtitle: "Quantidade total em estoque",
+      subtitle: "Quantidade total de produtos em estoque",
       icon: PackageIcon,
       color: "green",
       bgColor: "bg-green-50",
@@ -52,7 +52,7 @@ const StatsCards = ({
     {
       title: "Estoque Baixo",
       value: lowStockProducts,
-      subtitle: "Abaixo do mínimo",
+      subtitle: "Produtos com estoque baixo",
       icon: AlertTriangleIcon,
       color: "amber",
       bgColor: "bg-amber-50",
@@ -62,11 +62,11 @@ const StatsCards = ({
     {
       title: "Sem Estoque",
       value: outOfStockProducts,
-      subtitle: "Produtos zerados",
+      subtitle: "Produtos sem estoque",
       icon: XCircleIcon,
       color: "red",
       bgColor: "bg-red-50",
-      iconColor: "text-red-600",
+      iconColor: "destructive",
       borderColor: "border-red-200",
     },
   ];

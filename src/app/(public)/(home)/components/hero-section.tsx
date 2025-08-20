@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { ArrowRight, Github, ExternalLink } from "lucide-react"
+import { ArrowRight, ExternalLink } from "lucide-react"
 
 export function HeroSection() {
     return (

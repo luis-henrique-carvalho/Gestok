@@ -1,9 +1,6 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Badge } from "@/components/ui/badge";
-import { TrendingUp, TrendingDown } from "lucide-react";
-import { productTable, stockMovementsTable } from "@/drizzle/schema";
 import { ProductHistoryModal } from "../product-history-modal";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";

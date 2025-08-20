@@ -3,7 +3,17 @@
 import { z } from "zod";
 import { db } from "@/drizzle/db";
 import { productTable, stockMovementsTable } from "@/drizzle/schema";
-import { count, and, eq, sql, sum, countDistinct, desc } from "drizzle-orm";
+import {
+  count,
+  and,
+  eq,
+  sql,
+  sum,
+  countDistinct,
+  desc,
+  gte,
+  lte,
+} from "drizzle-orm";
 import { actionClient } from "@/lib/safe-action";
 import { requireActionAuth } from "@/lib/auth-utils";
 import dayjs from "dayjs";
@@ -28,6 +38,7 @@ export const getDashboard = actionClient
         outOfStockProductsResult,
         stockQuantityResult,
         latestStockMovementsResult,
+        monthStockMovementsResult,
       ] = await Promise.all([
         // 1. Total de produtos
         db
@@ -92,13 +103,35 @@ export const getDashboard = actionClient
 
         db.query.stockMovementsTable.findMany({
           where: eq(stockMovementsTable.userId, userId),
-          limit: 5,
+          limit: 10,
           with: {
             product: true,
             user: true,
           },
           orderBy: (table) => desc(table.createdAt),
         }),
+
+        // Dados agrupados por data para o gráfico
+        db
+          .select({
+            date: sql<string>`DATE(${stockMovementsTable.createdAt})`,
+            entrada: sum(
+              sql<number>`CASE WHEN ${stockMovementsTable.movementType} = 'in' THEN ${stockMovementsTable.quantity} ELSE 0 END`
+            ).mapWith(Number),
+            saida: sum(
+              sql<number>`CASE WHEN ${stockMovementsTable.movementType} = 'out' THEN ${stockMovementsTable.quantity} ELSE 0 END`
+            ).mapWith(Number),
+          })
+          .from(stockMovementsTable)
+          .where(
+            and(
+              eq(stockMovementsTable.userId, userId),
+              gte(stockMovementsTable.createdAt, new Date(from)),
+              lte(stockMovementsTable.createdAt, new Date(to))
+            )
+          )
+          .groupBy(sql`DATE(${stockMovementsTable.createdAt})`)
+          .orderBy(sql`DATE(${stockMovementsTable.createdAt})`),
       ]);
 
       const totalProducts = totalProductsResult[0]?.count || 0;
@@ -106,6 +139,7 @@ export const getDashboard = actionClient
       const outOfStockProducts = outOfStockProductsResult.length || 0;
       const stockQuantity = stockQuantityResult[0]?.quantity || 0;
       const latestStockMovements = latestStockMovementsResult;
+      const monthStockMovements = monthStockMovementsResult;
 
       return {
         success: true,
@@ -114,6 +148,7 @@ export const getDashboard = actionClient
         outOfStockProducts,
         stockQuantity,
         latestStockMovements,
+        monthStockMovements,
       };
     } catch (error) {
       console.error("Erro ao buscar dados do dashboard:", error);

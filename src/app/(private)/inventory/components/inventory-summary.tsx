@@ -1,7 +1,6 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Package, AlertTriangle, XCircle, CheckCircle } from "lucide-react";
 
 interface InventorySummaryProps {
@@ -61,10 +60,10 @@ export function InventorySummary({
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">Sem Estoque</CardTitle>
-                    <XCircle className="h-4 w-4 text-red-600" />
+                    <XCircle className="h-4 w-4 destructive" />
                 </CardHeader>
                 <CardContent>
-                    <div className="text-2xl font-bold text-red-600">{outOfStockProducts}</div>
+                    <div className="text-2xl font-bold destructive">{outOfStockProducts}</div>
                     <p className="text-xs text-muted-foreground">
                         Produtos sem estoque
                     </p>

@@ -112,7 +112,7 @@ export function ProductHistoryModal({ productId, productName }: ProductHistoryMo
                                                 ) : (
                                                     <TrendingDown className="h-4 w-4 text-red-600" />
                                                 )}
-                                                <Badge variant={movement.movementType === "in" ? "default" : "secondary"}>
+                                                <Badge variant={movement.movementType === "in" ? "default" : "destructive"}>
                                                     {movement.movementType === "in" ? "Entrada" : "Saída"}
                                                 </Badge>
                                             </div>
