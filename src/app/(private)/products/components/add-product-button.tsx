@@ -12,7 +12,7 @@ const AddProductButton = () => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="default">Adicionar Paciente</Button>
+        <Button variant="default">Adicionar Produto</Button>
       </DialogTrigger>
 
       <UpsertProductForm
