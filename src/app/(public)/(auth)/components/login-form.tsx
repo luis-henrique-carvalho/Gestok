@@ -23,8 +23,6 @@ import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 
-import { SocialLoginButtons } from "./social-login-buttons";
-
 export function LoginForm({
   className,
   ...props

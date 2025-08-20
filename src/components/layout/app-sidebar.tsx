@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  Gem,
   LayoutDashboard,
   LogOut,
   Package,

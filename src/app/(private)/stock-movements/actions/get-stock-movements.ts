@@ -2,7 +2,7 @@
 
 import { z } from "zod";
 import { db } from "@/drizzle/db";
-import { stockMovementsTable, productTable } from "@/drizzle/schema";
+import { stockMovementsTable } from "@/drizzle/schema";
 import { eq, desc, count } from "drizzle-orm";
 import { actionClient } from "@/lib/safe-action";
 import { requireActionAuth } from "@/lib/auth-utils";
