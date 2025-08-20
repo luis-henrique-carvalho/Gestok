@@ -4,12 +4,10 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 export function InvoicesTableSkeleton() {
     return (
         <div className="space-y-4">
-            {/* Search Input Skeleton */}
             <div className="flex items-center space-x-2">
                 <Skeleton className="h-10 w-[300px]" />
             </div>
 
-            {/* Table Skeleton */}
             <div className="rounded-md border">
                 <Table>
                     <TableHeader>
@@ -55,7 +53,6 @@ export function InvoicesTableSkeleton() {
                 </Table>
             </div>
 
-            {/* Pagination Skeleton */}
             <div className="flex items-center justify-between">
                 <Skeleton className="h-4 w-32" />
                 <div className="flex items-center space-x-2">

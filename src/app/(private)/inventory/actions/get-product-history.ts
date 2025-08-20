@@ -24,7 +24,6 @@ export const getProductHistory = actionClient
 
       const offset = (page - 1) * limit;
 
-      // Verificar se o produto pertence ao usuário
       const product = await db.query.productTable.findFirst({
         where: and(
           eq(productTable.id, productId),
@@ -43,7 +42,6 @@ export const getProductHistory = actionClient
         };
       }
 
-      // Buscar movimentações do produto
       const movements = await db.query.stockMovementsTable.findMany({
         where: eq(stockMovementsTable.productId, productId),
         limit,
