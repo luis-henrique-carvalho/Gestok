@@ -12,8 +12,6 @@ const Dashboard = async () => {
                     <PageTitle>Dashboard</PageTitle>
                     <PageDescription>Tenha a visão geral do seu negócio</PageDescription>
                 </PageHeaderContent>
-
-
             </PageHeader>
 
             <PageContent>
