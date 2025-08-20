@@ -8,9 +8,9 @@ import { actionClient } from "@/lib/safe-action";
 import { requireActionAuth } from "@/lib/auth-utils";
 
 const GetProductsSchema = z.object({
-  searchName: z.string().optional().default(""),
   page: z.coerce.number().int().positive().default(1),
   limit: z.coerce.number().int().positive().default(10),
+  searchName: z.string().optional().default(""),
 });
 
 export const getProducts = actionClient

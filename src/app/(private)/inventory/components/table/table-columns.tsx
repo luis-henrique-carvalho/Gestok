@@ -10,18 +10,13 @@ import "dayjs/locale/pt-br";
 
 dayjs.locale("pt-br");
 
-type Product = typeof productTable.$inferSelect & {
-    category?: {
-        id: number;
-        name: string;
-    } | null;
-    user?: {
-        id: string;
-        name: string;
-    } | null;
+type Product = {
+    id: number;
+    name: string;
+    sku: string;
+    categoryName: string;
     currentStock: number;
-    stockStatus: string;
-};
+}
 
 export const columns: ColumnDef<Product>[] = [
     {
@@ -35,13 +30,9 @@ export const columns: ColumnDef<Product>[] = [
         accessorKey: "name",
     },
     {
-        id: "category",
+        id: "categoryName",
         header: "Categoria",
-        accessorKey: "categoryId",
-        cell: (params) => {
-            const categoryName = params.row.original.category?.name;
-            return categoryName ? categoryName : "Sem categoria";
-        },
+        accessorKey: "categoryName",
     },
     {
         id: "currentStock",
@@ -49,29 +40,12 @@ export const columns: ColumnDef<Product>[] = [
         accessorKey: "currentStock",
         cell: (params) => {
             const stock = params.row.original.currentStock;
-            return `${stock} un`;
-        },
-    },
-    {
-        id: "stockStatus",
-        header: "Status",
-        accessorKey: "stockStatus",
-        cell: (params) => {
-            const status = params.row.original.stockStatus;
-            let variant: "default" | "secondary" | "destructive" | "outline" = "default";
 
-            switch (status) {
-                case "Sem estoque":
-                    variant = "destructive";
-                    break;
-                case "Estoque baixo":
-                    variant = "secondary";
-                    break;
-                default:
-                    variant = "default";
-            }
-
-            return <Badge variant={variant}>{status}</Badge>;
+            return (
+                <span className={stock > 0 ? "text-green-600" : "text-red-600"}>
+                    {stock > 0 ? "+" : ""}{stock} un
+                </span>
+            );
         },
     },
     {

@@ -1,5 +1,4 @@
 import {
-    PageActions,
     PageContainer,
     PageContent,
     PageDescription,
@@ -11,35 +10,35 @@ import { DataTable } from "@/components/ui/data-table";
 import { requireFullAuth } from "@/lib/auth-utils";
 import { getInventory } from "./actions";
 import { columns } from "./components/table/table-columns";
-import { SearchInventory } from "./components/search-inventory";
 import DynamicPagination from "@/components/layout/dinamic-pagination";
+import SearchInput from "@/components/layout/search-input";
+import { Suspense } from "react";
+import { InvoicesTableSkeleton } from "./components/invoices-table-skeleton";
+import { redirect } from "next/navigation";
 
-const DEFAULT_PAGE = 1;
-const DEFAULT_LIMIT = 20;
-
+const DEFAULT_LIMIT = 5;
 interface InventoryPageProps {
-    searchParams: {
+    searchParams: Promise<{
+        query?: string;
         page?: string;
-        limit?: string;
-        search?: string;
-    }
+    }>;
 }
 
-export default async function InventoryPage({ searchParams }: InventoryPageProps) {
+const InventoryPage = async ({ searchParams }: InventoryPageProps) => {
     await requireFullAuth();
+    const { query, page } = await searchParams;
 
-    const params = await searchParams
-    const currentPage = params.page || DEFAULT_PAGE;
-    const currentLimit = params?.limit || DEFAULT_LIMIT;
-    const searchName = params?.search || "";
+    if (!page) {
+        return redirect("/inventory?page=1");
+    }
 
-    const inventoryResult = await getInventory({
-        limit: String(currentLimit),
-        page: String(currentPage),
-        searchName,
+    const { data } = await getInventory({
+        limit: String(DEFAULT_LIMIT),
+        page: String(query ? 1 : page),
+        query,
     });
 
-    if (!inventoryResult.data?.success || !inventoryResult.data.data) {
+    if (!data?.inventory) {
         return (
             <PageContainer>
                 <PageHeader>
@@ -61,7 +60,7 @@ export default async function InventoryPage({ searchParams }: InventoryPageProps
         );
     }
 
-    const inventory = inventoryResult.data.data;
+    const inventory = data.inventory;
 
     return (
         <PageContainer>
@@ -74,37 +73,25 @@ export default async function InventoryPage({ searchParams }: InventoryPageProps
                 </PageHeaderContent>
             </PageHeader>
             <PageContent>
-                <div className="mb-4">
-                    <SearchInventory />
-                </div>
-                <DataTable
-                    columns={columns}
-                    data={inventory.data.map((item) => {
-                        // Determinar o status do estoque
-                        let stockStatus = "Normal";
-                        if (item.currentStock <= 0) {
-                            stockStatus = "Sem estoque";
-                        } else if (item.currentStock <= 5) {
-                            stockStatus = "Estoque baixo";
-                        }
-
-                        return {
-                            ...item,
-                            createdAt: new Date(item.createdAt),
-                            updatedAt: new Date(item.updatedAt),
-                            stockStatus,
-                            category: item.categoryName ? { id: item.categoryId || 0, name: item.categoryName } : null,
-                            user: null, // Não precisamos do user na tabela
-                        };
-                    })}
-                />
-                <div className="mt-6">
-                    <DynamicPagination
-                        currentPage={inventory.page}
-                        totalPages={Math.max(inventory.totalPages, 1)}
+                <Suspense
+                    key={`${query ?? ''}-${page ?? ''}`}
+                    fallback={<InvoicesTableSkeleton />}
+                >
+                    <SearchInput
+                        placeholder="Buscar produtos..."
                     />
-                </div>
+                    <DataTable
+                        columns={columns}
+                        data={inventory}
+                    />
+                    <DynamicPagination
+                        currentPage={data.pagination.page}
+                        totalPages={Math.max(data.pagination.totalPages, 1)}
+                    />
+                </Suspense>
             </PageContent>
         </PageContainer>
     );
 }
+
+export default InventoryPage;

@@ -19,9 +19,7 @@ export const getStockMovements = actionClient
 
     try {
       const session = await requireActionAuth();
-
       const userId = session.user.id;
-
       const offset = (page - 1) * limit;
 
       const stockMovements = await db.query.stockMovementsTable.findMany({
@@ -41,24 +39,20 @@ export const getStockMovements = actionClient
         .where(eq(stockMovementsTable.userId, userId));
 
       return {
-        data: stockMovements,
+        stockMovements,
         success: true,
-        page,
-        limit,
-        totalItems: totalCount[0].count,
-        totalPages: Math.ceil(totalCount[0].count / limit),
-        message: "Movimentações de estoque buscadas com sucesso!",
+        pagination: {
+          page,
+          limit,
+          totalItems: totalCount[0].count,
+          totalPages: Math.ceil(totalCount[0].count / limit),
+        },
       };
     } catch (error) {
       console.error("Erro ao buscar movimentações de estoque:", error);
       return {
         success: false,
-        data: [],
-        page,
-        limit,
-        totalItems: 0,
-        totalPages: 0,
-        message: "Ocorreu um erro ao buscar as movimentações de estoque.",
+        serverError: "Erro ao buscar movimentações de estoque.",
       };
     }
   });

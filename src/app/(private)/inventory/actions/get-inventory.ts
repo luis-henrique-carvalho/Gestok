@@ -8,100 +8,79 @@ import {
   stockMovementsTable,
   categoryTable,
 } from "@/drizzle/schema";
-import { eq, and, like, desc, count, sql, inArray } from "drizzle-orm";
+import { eq, sql, like, and, count, desc, sum, inArray } from "drizzle-orm";
 import { requireActionAuth } from "@/lib/auth-utils";
 
 const getInventorySchema = z.object({
-  page: z.string().default("1"),
-  limit: z.string().default("20"),
-  searchName: z.string().default(""),
+  page: z.coerce.number().int().positive().default(1),
+  limit: z.coerce.number().int().positive().default(10),
+  query: z.string().optional().default(""),
 });
 
 export const getInventory = actionClient
   .inputSchema(getInventorySchema)
   .action(async ({ parsedInput }) => {
+    const { query, page, limit } = parsedInput;
+
     try {
       const session = await requireActionAuth();
       const userId = session.user.id;
-      const pageNumber = parseInt(parsedInput.page);
-      const limitNumber = parseInt(parsedInput.limit);
-      const offset = (pageNumber - 1) * limitNumber;
 
-      // Buscar produtos que têm stock movements
-      const productsWithStock = await db
+      const offset = (page - 1) * limit;
+
+      const filterCondition = query
+        ? like(productTable.name, `%${query}%`)
+        : undefined;
+
+      const totalItemsResult = await db
+        .select({ id: productTable.id })
+        .from(productTable)
+        .innerJoin(
+          stockMovementsTable,
+          eq(productTable.id, stockMovementsTable.productId)
+        )
+        .innerJoin(categoryTable, eq(productTable.categoryId, categoryTable.id))
+        .where(and(eq(productTable.userId, userId), filterCondition))
+        .groupBy(productTable.id, categoryTable.name);
+
+      const totalItems = totalItemsResult.length;
+
+      const inventory = await db
         .select({
           id: productTable.id,
           name: productTable.name,
-          description: productTable.description,
-          sku: productTable.sku,
-          price: productTable.price,
-          userId: productTable.userId,
-          categoryId: productTable.categoryId,
-          createdAt: productTable.createdAt,
-          updatedAt: productTable.updatedAt,
           categoryName: categoryTable.name,
-          currentStock: sql<number>`
-            COALESCE(
-              (
-                SELECT SUM(
-                  CASE
-                    WHEN ${stockMovementsTable.movementType} = 'in' THEN ${stockMovementsTable.quantity}
-                    WHEN ${stockMovementsTable.movementType} = 'out' THEN -${stockMovementsTable.quantity}
-                  END
-                )
-                FROM ${stockMovementsTable}
-                WHERE ${stockMovementsTable.productId} = ${productTable.id}
-              ), 0
-            )
-          `,
+          sku: productTable.sku,
+          currentStock:
+            sql<number>`COALESCE(SUM(CASE WHEN stock_movements.movement_type = 'in' THEN stock_movements.quantity ELSE -stock_movements.quantity END), 0)`.as(
+              "current_stock"
+            ),
         })
         .from(productTable)
         .innerJoin(
           stockMovementsTable,
-          eq(stockMovementsTable.productId, productTable.id)
+          eq(productTable.id, stockMovementsTable.productId)
         )
-        .leftJoin(categoryTable, eq(categoryTable.id, productTable.categoryId))
+        .innerJoin(categoryTable, eq(productTable.categoryId, categoryTable.id))
         .where(
-          and(
-            eq(productTable.userId, userId),
-            parsedInput.searchName
-              ? like(productTable.name, `%${parsedInput.searchName}%`)
-              : undefined
+          inArray(
+            productTable.id,
+            totalItemsResult.map((item) => item.id)
           )
         )
         .groupBy(productTable.id, categoryTable.name)
-        .orderBy(desc(productTable.updatedAt))
-        .limit(limitNumber)
+        .orderBy(desc(productTable.sku))
+        .limit(limit)
         .offset(offset);
-
-      // Contar total de produtos com stock movements
-      const totalCountResult = await db
-        .select({ count: count() })
-        .from(productTable)
-        .innerJoin(
-          stockMovementsTable,
-          eq(stockMovementsTable.productId, productTable.id)
-        )
-        .where(
-          and(
-            eq(productTable.userId, userId),
-            parsedInput.searchName
-              ? like(productTable.name, `%${parsedInput.searchName}%`)
-              : undefined
-          )
-        );
-
-      const totalCount = totalCountResult[0].count;
-      const totalPages = Math.ceil(totalCount / limitNumber);
 
       return {
         success: true,
-        data: {
-          data: productsWithStock,
-          page: pageNumber,
-          limit: limitNumber,
-          totalPages,
-          totalCount,
+        inventory,
+        pagination: {
+          page,
+          limit,
+          totalItems: totalItems,
+          totalPages: Math.ceil(totalItems / limit),
         },
       };
     } catch (error) {

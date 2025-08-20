@@ -35,35 +35,35 @@ function DynamicPagination({ currentPage, totalPages }: DynamicPaginationProps) 
     }, [currentPage, page, setPage]);
 
     const getVisiblePages = () => {
-        if (totalPages <= 1) return [];
-
         const delta = 2;
-        const range = [];
-        const rangeWithDots = [];
+        const pages = [];
 
-        for (
-            let i = Math.max(2, currentPage - delta);
-            i <= Math.min(totalPages - 1, currentPage + delta);
-            i++
-        ) {
-            range.push(i);
+        // Calcula o range de páginas ao redor da página atual
+        const start = Math.max(1, currentPage - delta);
+        const end = Math.min(totalPages, currentPage + delta);
+
+        // Adiciona a primeira página se não estiver no range
+        if (start > 1) {
+            pages.push(1);
+            if (start > 2) {
+                pages.push("...");
+            }
         }
 
-        if (currentPage - delta > 2) {
-            rangeWithDots.push(1, "...");
-        } else {
-            rangeWithDots.push(1);
+        // Adiciona o range de páginas
+        for (let i = start; i <= end; i++) {
+            pages.push(i);
         }
 
-        rangeWithDots.push(...range);
-
-        if (currentPage + delta < totalPages - 1) {
-            rangeWithDots.push("...", totalPages);
-        } else {
-            rangeWithDots.push(totalPages);
+        // Adiciona a última página se não estiver no range
+        if (end < totalPages) {
+            if (end < totalPages - 1) {
+                pages.push("...");
+            }
+            pages.push(totalPages);
         }
 
-        return rangeWithDots;
+        return pages;
     };
 
     const handlePageChange = (newPage: number) => {
@@ -75,11 +75,6 @@ function DynamicPagination({ currentPage, totalPages }: DynamicPaginationProps) 
         params.set("page", newPage.toString());
         router.push(`?${params.toString()}`);
     };
-
-    // Não renderiza se não há páginas para mostrar
-    if (totalPages <= 1) {
-        return null;
-    }
 
     return (
         <Pagination>
