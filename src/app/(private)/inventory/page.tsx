@@ -26,6 +26,7 @@ interface InventoryPageProps {
 
 const InventoryPage = async ({ searchParams }: InventoryPageProps) => {
     await requireFullAuth();
+
     const { query, page } = await searchParams;
 
     if (!page) {

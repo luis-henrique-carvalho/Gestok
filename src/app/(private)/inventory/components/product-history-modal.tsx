@@ -63,14 +63,14 @@ export function ProductHistoryModal({ productId, productName }: ProductHistoryMo
     };
 
     return (
-        <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <Dialog open={isOpen} onOpenChange={setIsOpen} >
             <DialogTrigger asChild>
-                <Button variant="ghost" size="sm" onClick={handleOpen}>
+                <Button variant="outline" size="sm" onClick={handleOpen}>
                     <Eye className="mr-2 h-4 w-4" />
                     Ver histórico completo
                 </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
+            <DialogContent className="md:max-w-2xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                     <DialogTitle>Histórico de Movimentações</DialogTitle>
                     <DialogDescription>
@@ -93,11 +93,10 @@ export function ProductHistoryModal({ productId, productName }: ProductHistoryMo
                         <Table>
                             <TableHeader>
                                 <TableRow>
-                                    <TableHead className="w-[150px]">Data</TableHead>
-                                    <TableHead className="w-[120px]">Tipo</TableHead>
-                                    <TableHead className="w-[100px]">Quantidade</TableHead>
-                                    <TableHead className="w-[200px]">Motivo</TableHead>
-                                    <TableHead className="w-[120px]">Saldo</TableHead>
+                                    <TableHead>Data</TableHead>
+                                    <TableHead>Tipo</TableHead>
+                                    <TableHead>Quantidade</TableHead>
+                                    <TableHead>Motivo</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
