@@ -16,7 +16,7 @@ import { Suspense } from "react";
 import { InvoicesTableSkeleton } from "./components/invoices-table-skeleton";
 import { redirect } from "next/navigation";
 
-const DEFAULT_LIMIT = 5;
+const DEFAULT_LIMIT = 10;
 interface InventoryPageProps {
     searchParams: Promise<{
         query?: string;

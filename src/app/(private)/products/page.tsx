@@ -19,10 +19,10 @@ import { redirect } from "next/navigation";
 const DEFAULT_LIMIT = 10;
 
 interface ProductsPageProps {
-    searchParams: {
-        page?: string;
+    searchParams: Promise<{
         query?: string;
-    }
+        page?: string;
+    }>;
 }
 
 export default async function ProductsPage({ searchParams }: ProductsPageProps) {

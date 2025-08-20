@@ -13,25 +13,30 @@ import { getStockMovements } from "./actions/index";
 import { columns } from "./components/table/table-columns";
 import AddStockMovementButton from "./components/add-stock-movement-button";
 import DynamicPagination from "@/components/layout/dinamic-pagination";
+import { redirect } from "next/navigation";
 
-const DEFAULT_PAGE = 1;
 const DEFAULT_LIMIT = 10;
 
 interface StockMovementsPageProps {
-    searchParams: {
+    searchParams: Promise<{
+        query?: string;
         page?: string;
-        limit?: string;
-    }
+    }>;
 }
 
 export default async function StockMovementsPage({ searchParams }: StockMovementsPageProps) {
     await requireFullAuth();
 
-    const params = await searchParams
-    const currentPage = params.page || DEFAULT_PAGE;
-    const currentLimit = params?.limit || DEFAULT_LIMIT;
+    const { query, page } = await searchParams;
 
-    const { data } = await getStockMovements({ limit: currentLimit, page: currentPage });
+    if (!page) {
+        return redirect("/inventory?page=1");
+    }
+
+    const { data } = await getStockMovements({
+        limit: String(DEFAULT_LIMIT),
+        page: String(query ? 1 : page),
+    });
 
     if (!data?.stockMovements) {
         return (

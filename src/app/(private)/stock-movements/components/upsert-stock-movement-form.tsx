@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2, Check, ChevronsUpDown } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
 import { toast } from "sonner";
@@ -71,22 +71,24 @@ const UpsertStockMovementForm = ({
     const [searchTerm, setSearchTerm] = useState("");
     const [isProductSelectOpen, setIsProductSelectOpen] = useState(false);
 
-    const { data: products, isLoading } = useQuery({
+    const { data, isLoading } = useQuery({
         queryKey: ["get-products", searchTerm],
         queryFn: async () => await getProducts({
-            searchName: searchTerm,
+            query: searchTerm,
             limit: 50
         }),
         enabled: isProductSelectOpen,
         staleTime: 1000 * 60 * 5,
     });
 
+    const products = data?.data?.products;
+
     const defaultValues = {
         id: stockMovement?.id,
         quantity: stockMovement?.quantity || 1,
         movementType: stockMovement?.movementType || "in",
         movementReason: stockMovement?.movementReason || "supplier_purchase",
-        productId: stockMovement?.productId || products?.data?.data?.[0]?.id || undefined,
+        productId: stockMovement?.productId || products?.[0]?.id || undefined,
     }
 
     const form = useForm<UpsertStockMovementFormData>({
@@ -102,7 +104,7 @@ const UpsertStockMovementForm = ({
                 quantity: stockMovement?.quantity || 1,
                 movementType: stockMovement?.movementType || "in",
                 movementReason: stockMovement?.movementReason || "supplier_purchase",
-                productId: stockMovement?.productId || products?.data?.data?.[0]?.id || undefined,
+                productId: stockMovement?.productId || products?.[0]?.id || undefined,
             });
         }
     }, [isOpen, form, stockMovement]);
@@ -173,7 +175,7 @@ const UpsertStockMovementForm = ({
                                                     )}
                                                 >
                                                     {field.value
-                                                        ? products?.data?.data?.find((p) => p.id === field.value)?.name ?? "Selecione um produto"
+                                                        ? products?.find((p) => p.id === field.value)?.name ?? "Selecione um produto"
                                                         : "Selecione um produto"}
                                                     <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
                                                 </Button>
@@ -190,7 +192,7 @@ const UpsertStockMovementForm = ({
                                                 <CommandList>
                                                     <CommandEmpty>Nenhum produto encontrado.</CommandEmpty>
                                                     <CommandGroup>
-                                                        {products?.data?.data?.map((product) => (
+                                                        {products?.map((product) => (
                                                             <CommandItem
                                                                 key={product.id}
                                                                 value={`${product.name} ${product.sku}`}
