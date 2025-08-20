@@ -6,6 +6,7 @@ import {
   LogOut,
   Package,
   TrendingUp,
+  ClipboardList,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -42,6 +43,11 @@ const items = [
     title: "Produtos",
     url: "/products",
     icon: Package,
+  },
+  {
+    title: "Inventário",
+    url: "/inventory",
+    icon: ClipboardList,
   },
   {
     title: "Movimentações",
