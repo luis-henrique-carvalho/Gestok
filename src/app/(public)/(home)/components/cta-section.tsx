@@ -18,7 +18,7 @@ export function CTASection() {
                 <div className="text-center mb-16">
                     <div className="inline-flex items-center gap-2 bg-primary-foreground/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
                         <Star className="h-4 w-4 text-yellow-300" />
-                        <span className="text-primary-foreground text-sm font-medium">Mais de 500+ mercados confiam</span>
+                        <span className="text-primary-foreground text-sm font-medium">Mais de 500+ clientes confiam</span>
                     </div>
 
                     <h2 className="text-4xl font-bold tracking-tight text-primary-foreground sm:text-5xl lg:text-6xl mb-6">
@@ -26,7 +26,7 @@ export function CTASection() {
                     </h2>
 
                     <p className="mx-auto max-w-2xl text-xl text-primary-foreground/90 leading-relaxed">
-                        Sistema completo para gerenciar produtos, movimentações e relatórios do seu mercado
+                        Sistema completo para gerenciar produtos, movimentações e relatórios do seu estoque
                     </p>
                 </div>
 
@@ -73,14 +73,6 @@ export function CTASection() {
                             <ArrowRight className="ml-2 h-5 w-5" />
                         </Button>
 
-                        <Button
-                            variant="outline"
-                            size="lg"
-                            className="border-primary-foreground/30 bg-primary-foreground/10 text-primary-foreground hover:bg-primary-foreground/20 px-8 py-4 text-lg font-semibold backdrop-blur-sm transition-all duration-300"
-                        >
-                            <Github className="mr-2 h-5 w-5" />
-                            Ver código fonte
-                        </Button>
                     </div>
                 </div>
             </div>
