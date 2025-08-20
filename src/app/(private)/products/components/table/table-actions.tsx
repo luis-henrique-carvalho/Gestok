@@ -42,10 +42,10 @@ const TableActions = ({ product }: Props) => {
 
   const deleteProductAction = useAction(deleteProduct, {
     onSuccess: () => {
-      toast.success("Paciente deletado com sucesso.");
+      toast.success("Produto deletado com sucesso.");
     },
     onError: () => {
-      toast.error("Erro ao deletar product.");
+      toast.error("Erro ao deletar produto.");
     },
   });
 

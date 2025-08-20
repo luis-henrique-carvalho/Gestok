@@ -23,9 +23,6 @@ export const upsertProduct = actionClient
       return { success: false, serverError: "Não autorizado." };
     }
 
-    console.log("ID DO USUÁRIO NO PRODUTO", productTable.userId);
-    console.log("ID DO USUÁRIO NO SESSION", session.user.id);
-
     try {
       await db
         .insert(productTable)
@@ -48,8 +45,6 @@ export const upsertProduct = actionClient
 
       return { success: true, message: "Produto salvo com sucesso!" };
     } catch (error: any) {
-      console.log(error);
-
       const constraintName = error.cause.constraint_name as string;
 
       const constraintMapping: Record<
