@@ -18,14 +18,14 @@ import { redirect } from "next/navigation";
 
 const DEFAULT_LIMIT = 10;
 
-interface ProductsPageProps {
+export default async function ProductsPage({
+    searchParams,
+}: {
     searchParams: Promise<{
         query?: string;
         page?: string;
     }>;
-}
-
-export default async function ProductsPage({ searchParams }: ProductsPageProps) {
+}) {
     await requireFullAuth();
 
     const { query, page } = await searchParams;
