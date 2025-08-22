@@ -37,7 +37,7 @@ export const columns: ColumnDef<StockMovement>[] = [
             const movementType = params.row.original.movementType;
 
             return (
-                <span className={movementType === "out" ? "destructive" : "text-green-600"}>
+                <span className={movementType === "out" ? "text-red-600" : "text-green-600"}>
                     {movementType === "out" ? "-" : "+"}{quantity} un
                 </span>
             );
