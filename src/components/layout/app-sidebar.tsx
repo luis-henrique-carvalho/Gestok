@@ -6,6 +6,7 @@ import {
   Package,
   TrendingUp,
   ClipboardList,
+  CircleIcon,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -72,7 +73,10 @@ export function AppSidebar() {
   return (
     <Sidebar>
       <SidebarHeader className="border-b p-4">
-        <Image src="/logo.svg" alt="Doutor Agenda" width={136} height={28} />
+        <div className="flex items-center">
+          <CircleIcon className="h-6 w-6 text-primary" />
+          <h2 className="ml-2 text-xl font-semibold text-gray-900">Ge<span className="text-primary">stok</span></h2>
+        </div>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
