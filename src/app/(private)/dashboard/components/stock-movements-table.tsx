@@ -45,7 +45,6 @@ export function StockMovementsTable({ stockMovements }: StockMovementsTableProps
                             <TableHead>Produto</TableHead>
                             <TableHead>Tipo</TableHead>
                             <TableHead>Quantidade</TableHead>
-                            <TableHead>Data</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -68,7 +67,9 @@ export function StockMovementsTable({ stockMovements }: StockMovementsTableProps
                                         </Badge>
                                     </TableCell>
                                     <TableCell className="font-mono">
-                                        {movement.quantity}
+                                        <span className={movement.movementType === "out" ? "text-red-600" : "text-green-600"}>
+                                            {movement.movementType === "out" ? "-" : "+"}{movement.quantity} un
+                                        </span>
                                     </TableCell>
                                 </TableRow>
                             ))
