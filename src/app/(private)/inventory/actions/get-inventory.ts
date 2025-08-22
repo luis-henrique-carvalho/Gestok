@@ -8,7 +8,7 @@ import {
   stockMovementsTable,
   categoryTable,
 } from "@/drizzle/schema";
-import { eq, sql, like, and, count, desc, sum, inArray } from "drizzle-orm";
+import { eq, sql, like, and, desc, inArray } from "drizzle-orm";
 import { requireActionAuth } from "@/lib/auth-utils";
 
 const getInventorySchema = z.object({

@@ -198,7 +198,6 @@ describe("Product Flow Test", () => {
         limit: 10,
         offset: 0,
       });
-      const countResult = await mockDb.select().from().where();
 
       expect(capturedQueryParams).toEqual({
         where: { userId: mockSession.user.id },

@@ -4,8 +4,6 @@ import * as React from "react"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import dayjs from "dayjs"
-
 interface StockMovement {
     id: number
     quantity: number
@@ -21,19 +19,6 @@ interface StockMovement {
 
 interface StockMovementsTableProps {
     stockMovements: StockMovement[]
-}
-
-const getMovementReasonLabel = (reason: string) => {
-    switch (reason) {
-        case "supplier_purchase":
-            return "Compra do Fornecedor"
-        case "customer_sale":
-            return "Venda ao Cliente"
-        case "stock_replenishment":
-            return "Reposição de Estoque"
-        default:
-            return reason
-    }
 }
 
 const getMovementTypeLabel = (type: "in" | "out") => {
