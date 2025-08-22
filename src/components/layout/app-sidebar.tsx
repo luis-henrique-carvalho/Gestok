@@ -75,7 +75,7 @@ export function AppSidebar() {
       <SidebarHeader className="border-b p-4">
         <div className="flex items-center">
           <CircleIcon className="h-6 w-6 text-primary" />
-          <h2 className="ml-2 text-xl font-semibold text-gray-900">Ge<span className="text-primary">stok</span></h2>
+          <h2 className="ml-2 text-2xl font-semibold text-gray-900">GE<span className="text-primary">STOK</span></h2>
         </div>
       </SidebarHeader>
       <SidebarContent>
