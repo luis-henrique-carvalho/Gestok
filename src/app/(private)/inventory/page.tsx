@@ -1,22 +1,8 @@
-import {
-    PageContainer,
-    PageContent,
-    PageDescription,
-    PageHeader,
-    PageHeaderContent,
-    PageTitle,
-} from "@/components/layout/page-container";
-import { DataTable } from "@/components/ui/data-table";
+import React, { Suspense } from "react";
 import { requireFullAuth } from "@/lib/auth-utils";
-import { getInventory } from "./actions";
-import { columns } from "./components/table/table-columns";
-import DynamicPagination from "@/components/layout/dinamic-pagination";
-import SearchInput from "@/components/layout/search-input";
-import { Suspense } from "react";
-import { InvoicesTableSkeleton } from "./components/invoices-table-skeleton";
-import { redirect } from "next/navigation";
+import InventoryContent from "./components/inventory-content";
+import PagesLoading from "@/components/layout/pages-loading";
 
-const DEFAULT_LIMIT = 10;
 interface InventoryPageProps {
     searchParams: Promise<{
         query?: string;
@@ -29,70 +15,18 @@ const InventoryPage = async ({ searchParams }: InventoryPageProps) => {
 
     const { query, page } = await searchParams;
 
-    if (!page) {
-        return redirect("/inventory?page=1");
-    }
-
-    const { data } = await getInventory({
-        limit: String(DEFAULT_LIMIT),
-        page: String(query ? 1 : page),
-        query,
-    });
-
-    if (!data?.inventory) {
-        return (
-            <PageContainer>
-                <PageHeader>
-                    <PageHeaderContent>
-                        <PageTitle>Inventário</PageTitle>
-                        <PageDescription>
-                            Gerencie seus produtos e estoque
-                        </PageDescription>
-                    </PageHeaderContent>
-                </PageHeader>
-                <PageContent>
-                    <div className="text-center py-8">
-                        <p className="text-muted-foreground">
-                            Erro ao carregar inventário. Tente novamente.
-                        </p>
-                    </div>
-                </PageContent>
-            </PageContainer>
-        );
-    }
-
-    const inventory = data.inventory;
-
     return (
-        <PageContainer>
-            <PageHeader>
-                <PageHeaderContent>
-                    <PageTitle>Inventário</PageTitle>
-                    <PageDescription>
-                        Gerencie seus produtos e estoque
-                    </PageDescription>
-                </PageHeaderContent>
-            </PageHeader>
-            <PageContent>
-                <Suspense
-                    key={`${query ?? ''}-${page ?? ''}`}
-                    fallback={<InvoicesTableSkeleton />}
-                >
-                    <SearchInput
-                        placeholder="Buscar produtos..."
-                    />
-                    <DataTable
-                        columns={columns}
-                        data={inventory}
-                    />
-                    <DynamicPagination
-                        currentPage={data.pagination.page}
-                        totalPages={Math.max(data.pagination.totalPages, 1)}
-                    />
-                </Suspense>
-            </PageContent>
-        </PageContainer>
+        <Suspense fallback={<PagesLoading
+            title="Inventário"
+            description="Gerencie seus produtos e estoque"
+            showActions={false}
+            showSearch={true}
+            columns={5}
+            rows={10}
+        />}>
+            <InventoryContent query={query} page={page || "1"} />
+        </Suspense>
     );
-}
+};
 
 export default InventoryPage;

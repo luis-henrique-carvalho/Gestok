@@ -27,7 +27,6 @@ interface ProductHistoryModalProps {
 
 export function ProductHistoryModal({ productId, productName }: ProductHistoryModalProps) {
     const [isOpen, setIsOpen] = useState(false);
-    const [currentPage, setCurrentPage] = useState(1);
 
     const { execute, result, isExecuting } = useAction(getProductHistory, {
         onSuccess: () => {
@@ -41,7 +40,6 @@ export function ProductHistoryModal({ productId, productName }: ProductHistoryMo
     };
 
     const handlePageChange = (page: number) => {
-        setCurrentPage(page);
         execute({ productId, page, limit: 10 });
     };
 

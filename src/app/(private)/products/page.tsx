@@ -1,104 +1,32 @@
-import {
-    PageActions,
-    PageContainer,
-    PageContent,
-    PageDescription,
-    PageHeader,
-    PageHeaderContent,
-    PageTitle,
-} from "@/components/layout/page-container";
-import { DataTable } from "@/components/ui/data-table";
+import React, { Suspense } from "react";
 import { requireFullAuth } from "@/lib/auth-utils";
-import { getProducts } from "./actions";
-import { columns } from "./components/table/table-columns";
-import AddProductButton from "./components/add-product-button";
-import DynamicPagination from "@/components/layout/dinamic-pagination";
-import SearchInput from "@/components/layout/search-input";
-import { redirect } from "next/navigation";
+import ProductsContent from "./components/products-content";
+import PagesLoading from "@/components/layout/pages-loading";
 
-const DEFAULT_LIMIT = 10;
-
-export default async function ProductsPage({
-    searchParams,
-}: {
+interface ProductsPageProps {
     searchParams: Promise<{
         query?: string;
         page?: string;
     }>;
-}) {
+}
+
+const ProductsPage = async ({ searchParams }: ProductsPageProps) => {
     await requireFullAuth();
 
     const { query, page } = await searchParams;
 
-    if (!page) {
-        return redirect("/products?page=1");
-    }
-
-    const { data } = await getProducts({
-        limit: String(DEFAULT_LIMIT),
-        page: String(query ? 1 : page),
-        query,
-    });
-
-    if (!data?.products) {
-        return (
-            <PageContainer>
-                <PageHeader>
-                    <PageHeaderContent>
-                        <PageTitle>Produtos</PageTitle>
-                        <PageDescription>
-                            Gerencie seus produtos e estoque
-                        </PageDescription>
-                    </PageHeaderContent>
-                    <PageActions>
-                        <AddProductButton />
-                    </PageActions>
-                </PageHeader>
-                <PageContent>
-                    <div className="text-center py-8">
-                        <p className="text-muted-foreground">
-                            Erro ao carregar produtos. Tente novamente.
-                        </p>
-                    </div>
-                </PageContent>
-            </PageContainer>
-        );
-    }
-
-    const products = data.products;
-
     return (
-        <PageContainer>
-            <PageHeader>
-                <PageHeaderContent>
-                    <PageTitle>Produtos</PageTitle>
-                    <PageDescription>
-                        Gerencie seus produtos e estoque
-                    </PageDescription>
-                </PageHeaderContent>
-                <PageActions>
-                    <AddProductButton />
-                </PageActions>
-            </PageHeader>
-            <PageContent>
-                <SearchInput
-                    placeholder="Buscar produtos..."
-                />
-                <DataTable
-                    columns={columns}
-                    data={(products).map((p) => ({
-                        ...p,
-                        createdAt: new Date(p.createdAt),
-                        updatedAt: new Date(p.updatedAt),
-                    }))}
-                />
-                <div className="mt-6">
-                    <DynamicPagination
-                        currentPage={data.pagination.page}
-                        totalPages={Math.max(data.pagination.totalPages, 1)}
-                    />
-                </div>
-            </PageContent>
-        </PageContainer>
+        <Suspense fallback={<PagesLoading
+            title="Produtos"
+            description="Gerencie seus produtos e estoque"
+            showActions={true}
+            showSearch={true}
+            columns={6}
+            rows={10}
+        />}>
+            <ProductsContent query={query} page={page || "1"} />
+        </Suspense>
     );
-}
+};
+
+export default ProductsPage;

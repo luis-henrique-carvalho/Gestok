@@ -3,20 +3,9 @@
 import { z } from "zod";
 import { db } from "@/drizzle/db";
 import { productTable, stockMovementsTable } from "@/drizzle/schema";
-import {
-  count,
-  and,
-  eq,
-  sql,
-  sum,
-  countDistinct,
-  desc,
-  gte,
-  lte,
-} from "drizzle-orm";
+import { and, eq, sql, sum, countDistinct, desc, gte, lte } from "drizzle-orm";
 import { actionClient } from "@/lib/safe-action";
 import { requireActionAuth } from "@/lib/auth-utils";
-import dayjs from "dayjs";
 
 const GetDashboardSchema = z.object({
   from: z.string(),

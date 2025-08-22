@@ -2,7 +2,6 @@ import {
   PackageIcon,
   AlertTriangleIcon,
   XCircleIcon,
-  DollarSignIcon,
 } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -21,13 +20,6 @@ const StatsCards = ({
   outOfStockProducts,
   stockQuantity,
 }: StatsCardsProps) => {
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    }).format(value);
-  };
-
   const stats = [
     {
       title: "Total de Produtos",
